@@ -1,0 +1,36 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}پروفایل{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h3 class="mb-0">👤 پروفایل کاربر</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>نام کاربری:</strong> {{ user.username }}</p>
+                <p><strong>ایمیل:</strong> {{ user.email }}</p>
+                <p><strong>تاریخ عضویت:</strong> {{ user.date_joined|date:"Y/m/d" }}</p>
+                <p><strong>نقش:</strong> 
+                    {% if user.profile.role == 'student' %}
+                        🎓 دانش‌آموز
+                    {% else %}
+                        🧑‍🏫 مشاور
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <a href="#" class="btn btn-primary w-100">📊 گزارش‌های مطالعه</a>
+            </div>
+            <div class="col-md-6">
+                <a href="{% url 'accounts:logout' %}" class="btn btn-danger w-100">🚪 خروج</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
