@@ -1,0 +1,95 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}جزییات {{ report.date }}{% endblock %}
+
+{% block content %}
+<!-- هدر و دکمه‌ها -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📅 گزارش: {{ report.date|date:"Y/m/d" }}</h2>
+    <div>
+        <a href="{% url 'study_log:add_session' report.id %}" class="btn btn-success">
+            ➕ جلسه جدید
+        </a>
+        <a href="{% url 'study_log:my_reports' %}" class="btn btn-secondary">
+            🔙 بازگشت
+        </a>
+    </div>
+</div>
+
+<!-- خلاصه آماری -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <h5>⏱️ مجموع زمان</h5>
+                <h3>{{ total_hours }} ساعت و {{ total_minutes }} دقیقه</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <h5>📝 تعداد تست</h5>
+                <h3>{{ total_tests }} تست</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center bg-light">
+            <div class="card-body">
+                <h5>📚 تعداد جلسات</h5>
+                <h3>{{ sessions|length }} جلسه</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- لیست جلسات -->
+{% if sessions %}
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">📋 جلسات مطالعه</h5>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>#</th>
+                        <th>درس</th>
+                        <th>شروع</th>
+                        <th>پایان</th>
+                        <th>مدت (دقیقه)</th>
+                        <th>تعداد تست</th>
+                        <th>توضیحات</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in sessions %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><strong>{{ session.subject }}</strong></td>
+                            <td>{{ session.start_time|time:"H:i" }}</td>
+                            <td>{{ session.end_time|time:"H:i" }}</td>
+                            <td>{{ session.duration_minutes|floatformat:"0" }}</td>
+                            <td>{{ session.test_count }}</td>
+                            <td>{{ session.description|default:"-"|truncatechars:20 }}</td>
+                            <td>
+                                <a href="{% url 'study_log:edit_session' session.id %}" class="btn btn-warning btn-sm">✏️</a>
+                                <a href="{% url 'study_log:delete_session' session.id %}" class="btn btn-danger btn-sm">🗑️</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">
+        <h5>⏳ هیچ جلسه‌ای برای این روز ثبت نشده است.</h5>
+        <a href="{% url 'study_log:add_session' report.id %}" class="btn btn-success mt-2">
+            ➕ اولین جلسه را ثبت کنید
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

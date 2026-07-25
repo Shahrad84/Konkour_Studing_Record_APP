@@ -1,0 +1,41 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}لیست گزارش‌های روزانه{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 گزارش‌های مطالعه من</h2>
+    <a href="{% url 'study_log:create_report' %}" class="btn btn-primary">
+        ➕ گزارش جدید
+    </a>
+</div>
+
+{% if reports %}
+    <div class="row">
+        {% for report in reports %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ report.date|date:"Y/m/d" }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-info">جلسات: {{ report.sessions.count }}</span>
+                            <span class="badge bg-success">تست: {{ report.total_tests }}</span>
+                        </p>
+                        <a href="{% url 'study_log:daily_detail' report.id %}" class="btn btn-outline-primary btn-sm">
+                            📖 مشاهده جزئیات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-warning text-center">
+        <h4>⏳ هنوز هیچ گزارشی ثبت نکردید!</h4>
+        <p>اولین گزارش روزانه‌تان را ثبت کنید.</p>
+        <a href="{% url 'study_log:create_report' %}" class="btn btn-success">
+            ➕ شروع کنید
+        </a>
+    </div>
+{% endif %}
+{% endblock %}

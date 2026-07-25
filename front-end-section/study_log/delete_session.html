@@ -1,0 +1,34 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}حذف جلسه{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">⚠️ هشدار حذف</h4>
+            </div>
+            <div class="card-body text-center">
+                <h5 class="mb-4">آیا از حذف این جلسه اطمینان دارید؟</h5>
+                
+                <div class="alert alert-secondary">
+                    <p><strong>درس:</strong> {{ session.subject }}</p>
+                    <p><strong>زمان:</strong> {{ session.start_time|time:"H:i" }} تا {{ session.end_time|time:"H:i" }}</p>
+                    <p><strong>تعداد تست:</strong> {{ session.test_count }}</p>
+                </div>
+                
+                <p class="text-danger small">⚠️ این عمل غیرقابل بازگشت است!</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'study_log:daily_detail' report.id %}" class="btn btn-secondary">🔙 انصراف</a>
+                        <button type="submit" class="btn btn-danger">🗑️ بله، حذف کن</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

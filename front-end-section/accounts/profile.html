@@ -25,10 +25,15 @@
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <a href="#" class="btn btn-primary w-100">📊 گزارش‌های مطالعه</a>
+                <!-- ✅ این لینک کاربر رو به صفحه‌ی لیست گزارش‌ها می‌بره -->
+                <a href="{% url 'study_log:my_reports' %}" class="btn btn-primary w-100">
+                    📊 گزارش‌های مطالعه
+                </a>
             </div>
             <div class="col-md-6">
-                <a href="{% url 'accounts:logout' %}" class="btn btn-danger w-100">🚪 خروج</a>
+                <a href="{% url 'accounts:logout' %}" class="btn btn-danger w-100">
+                    🚪 خروج
+                </a>
             </div>
         </div>
     </div>
