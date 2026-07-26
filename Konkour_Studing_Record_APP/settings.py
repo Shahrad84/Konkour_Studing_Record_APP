@@ -84,8 +84,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',  # موتور MySQL
         'NAME': 'study_track_db',              # اسم دیتابیسی که ساختیم
         'USER': 'study_user',                  # کاربری که ساختیم
-        'PASSWORD': 'your_strong_password',    # رمز کاربر
-        'HOST': 'localhost',                   # یا 127.0.0.1
+        'PASSWORD': 'ShMySQLSh',    # رمز کاربر
+        'HOST': '127.0.0.1',                   # یا 127.0.0.1
         'PORT': '3306',                        # پورت پیش‌فرض MySQL
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

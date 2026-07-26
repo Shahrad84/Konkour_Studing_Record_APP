@@ -1,0 +1,39 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}داشبورد مشاور{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📋 دانش‌آموزان من</h2>
+    <span class="badge bg-primary">{{ students|length }} دانش‌آموز</span>
+</div>
+
+{% if students %}
+    <div class="row">
+        {% for student in students %}
+            <div class="col-md-4 mb-3">
+                <div class="card {% if student.has_reported_today %}border-success{% else %}border-danger{% endif %}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ student.username }}</h5>
+                        <p class="card-text">
+                            <span class="badge bg-info">📊 {{ student.total_reports }} گزارش</span>
+                            {% if student.has_reported_today %}
+                                <span class="badge bg-success">✅ امروز گزارش داد</span>
+                            {% else %}
+                                <span class="badge bg-danger">❌ امروز گزارش نداد</span>
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'study_log:consultant_student_detail' student.profile.id %}" class="btn btn-primary btn-sm">
+                            📖 مشاهده گزارش‌ها
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info text-center">
+        <h5>⏳ هنوز هیچ دانش‌آموزی به شما متصل نشده است.</h5>
+    </div>
+{% endif %}
+{% endblock %}

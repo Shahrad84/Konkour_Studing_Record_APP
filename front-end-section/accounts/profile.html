@@ -20,12 +20,48 @@
                         🧑‍🏫 مشاور
                     {% endif %}
                 </p>
+                
+                <!-- نمایش مشاور (فقط برای دانش‌آموزان) -->
+                {% if user.profile.role == 'student' %}
+                    <p><strong>مشاور:</strong> 
+                        {% if user.profile.consultant %}
+                            {{ user.profile.consultant.user.username }}
+                            <span class="badge bg-success">✅ انتخاب شده</span>
+                        {% else %}
+                            <span class="badge bg-warning">❌ انتخاب نشده</span>
+                        {% endif %}
+                    </p>
+                {% endif %}
             </div>
         </div>
+        
+        <!-- فرم انتخاب مشاور (فقط برای دانش‌آموزانی که مشاور ندارند) -->
+        {% if user.profile.role == 'student' and not user.profile.consultant %}
+            <hr>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5>🧑‍🏫 انتخاب مشاور</h5>
+                            <p class="text-muted">نام کاربری مشاور خود را وارد کنید:</p>
+                            <form method="post" class="row g-3">
+                                {% csrf_token %}
+                                <div class="col-md-8">
+                                    <input type="text" name="consultant_username" class="form-control" placeholder="نام کاربری مشاور را وارد کنید">
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary w-100">انتخاب مشاور</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <!-- ✅ این لینک کاربر رو به صفحه‌ی لیست گزارش‌ها می‌بره -->
                 <a href="{% url 'study_log:my_reports' %}" class="btn btn-primary w-100">
                     📊 گزارش‌های مطالعه
                 </a>

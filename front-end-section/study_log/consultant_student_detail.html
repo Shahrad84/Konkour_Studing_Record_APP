@@ -1,0 +1,68 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}گزارش‌های {{ student.user.username }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>📊 گزارش‌های {{ student.user.username }}</h2>
+    <a href="{% url 'study_log:consultant_dashboard' %}" class="btn btn-secondary">
+        🔙 بازگشت
+    </a>
+</div>
+
+<div class="alert alert-info">
+    <p><strong>نام کاربری:</strong> {{ student.user.username }}</p>
+    <p><strong>تعداد کل گزارش‌ها:</strong> {{ total_reports }}</p>
+</div>
+
+{% if reports %}
+    {% for item in reports %}
+        <div class="card mb-3">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">📅 {{ item.report.date|date:"Y/m/d" }}</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col-md-6">
+                        <span class="badge bg-info">⏱️ {{ item.total_minutes|floatformat:"0" }} دقیقه</span>
+                    </div>
+                    <div class="col-md-6">
+                        <span class="badge bg-success">📝 {{ item.total_tests }} تست</span>
+                    </div>
+                </div>
+                
+                {% if item.sessions %}
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>درس</th>
+                                <th>شروع</th>
+                                <th>پایان</th>
+                                <th>تست</th>
+                                <th>توضیحات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for session in item.sessions %}
+                                <tr>
+                                    <td><strong>{{ session.subject }}</strong></td>
+                                    <td>{{ session.start_time|time:"H:i" }}</td>
+                                    <td>{{ session.end_time|time:"H:i" }}</td>
+                                    <td>{{ session.test_count }}</td>
+                                    <td>{{ session.description|default:"-" }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted">هیچ جلسه‌ای ثبت نشده</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="alert alert-warning">
+        <p>این دانش‌آموز هنوز هیچ گزارشی ثبت نکرده است.</p>
+    </div>
+{% endif %}
+{% endblock %}

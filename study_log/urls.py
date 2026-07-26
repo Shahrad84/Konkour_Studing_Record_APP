@@ -12,4 +12,7 @@ urlpatterns = [
     path('daily/<int:daily_report_id>/add/', views.add_session, name='add_session'),
     path('session/<int:session_id>/edit/', views.edit_session, name='edit_session'),
     path('session/<int:session_id>/delete/', views.delete_session, name='delete_session'),
+
+    path('consultant/dashboard/', views.consultant_dashboard, name='consultant_dashboard'),
+    path('consultant/student/<int:student_id>/', views.consultant_student_detail, name='consultant_student_detail'),
 ]

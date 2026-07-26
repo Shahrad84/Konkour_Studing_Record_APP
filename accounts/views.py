@@ -1,7 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from .models import Profile
 
 
 def register_view(request):
@@ -80,16 +84,36 @@ def logout_view(request):
 
 
 
-
-
+@login_required
 def profile_view(request):
     """
-    صفحه‌ی پروفایل کاربر رو نشون میده (بعد از لاگین)
+    نمایش پروفایل کاربر و امکان انتخاب مشاور (برای دانش‌آموزان)
     """
-
-    if not request.user.is_authenticated:
-        return redirect('accounts:login')
+    profile = request.user.profile
     
-    return render(request, 'accounts/profile.html', {
-        'user': request.user
-    })
+    if request.method == 'POST' and profile.role == 'student':
+        consultant_username = request.POST.get('consultant_username', '').strip()
+        
+        if consultant_username:
+            try:
+                consultant_user = User.objects.get(username=consultant_username)
+                
+                if hasattr(consultant_user, 'profile') and consultant_user.profile.role == 'consultant':
+                    if consultant_user == request.user:
+                        messages.error(request, 'شما نمی‌توانید خودتان را به عنوان مشاور انتخاب کنید!')
+                    else:
+                        profile.consultant = consultant_user.profile
+                        profile.save()
+                        messages.success(request, f'مشاور {consultant_user.username} با موفقیت انتخاب شد!')
+                else:
+                    messages.error(request, 'این کاربر نقش مشاور را ندارد!')
+
+            except User.DoesNotExist:
+                messages.error(request, 'کاربری با این نام کاربری در دیتابیس وجود ندارد!')
+        else:
+            messages.warning(request, 'لطفاً نام کاربری مشاور را وارد کنید.')
+    
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'accounts/profile.html', context)

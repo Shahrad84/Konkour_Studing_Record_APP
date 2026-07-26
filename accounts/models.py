@@ -12,6 +12,16 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='student')
     phone = models.CharField(max_length=15, blank=True, null=True)
+
+
+    consultant = models.ForeignKey(
+        'self', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='students',
+        limit_choices_to={'role': 'consultant'}  # فقط مشاورها میتونن انتخاب بشن
+    )
     
     def __str__(self):
         return f"{self.user.username} - {self.get_role_display()}"
