@@ -8,6 +8,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 
 
+
 def register_view(request):
     """
     این ویو کارش نمایش فرم ثبت‌نام و پردازش اطلاعات اونه

@@ -1,0 +1,156 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <!-- Hero Section -->
+        <div class="text-center mb-5">
+            <h1 class="display-3 fw-bold text-primary">📚 سامانه ثبت مطالعه</h1>
+            <p class="lead text-muted mt-3">
+                مطالعه خود را ثبت کنید، پیشرفت خود را بسنجید، با مشاور خود در ارتباط باشید.
+            </p>
+            <hr class="w-50 mx-auto">
+        </div>
+        
+        {% if user.is_authenticated %}
+            <!-- ===== کاربر لاگین کرده ===== -->
+            <div class="row g-4">
+                <div class="col-md-12 text-center">
+                    <h3 class="mb-4">👋 خوش آمدی <span class="text-primary">{{ user.username }}</span></h3>
+                    <p class="text-muted">نقش شما: 
+                        {% if user.profile.role == 'student' %}
+                            🎓 دانش‌آموز
+                        {% else %}
+                            🧑‍🏫 مشاور
+                        {% endif %}
+                    </p>
+                </div>
+                
+                {% if user.profile.role == 'student' %}
+                    <!-- ===== کارت‌های دانش‌آموز ===== -->
+                    <div class="col-md-6">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-list fa-3x text-primary mb-3"></i>
+                                <h5 class="card-title">گزارش‌های من</h5>
+                                <p class="card-text text-muted">مشاهده‌ی تمام گزارش‌های روزانه‌ات</p>
+                                <a href="{% url 'study_log:my_reports' %}" class="btn btn-primary">
+                                    مشاهده گزارش‌ها
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-plus-circle fa-3x text-success mb-3"></i>
+                                <h5 class="card-title">ثبت گزارش جدید</h5>
+                                <p class="card-text text-muted">یک گزارش روزانه جدید ثبت کن</p>
+                                <a href="{% url 'study_log:create_report' %}" class="btn btn-success">
+                                    ثبت گزارش
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- نمایش مشاور (اگر انتخاب شده باشد) -->
+                    {% if user.profile.consultant %}
+                        <div class="col-md-12 mt-3">
+                            <div class="alert alert-success text-center">
+                                <i class="fas fa-user-tie"></i> مشاور شما: 
+                                <strong>{{ user.profile.consultant.user.username }}</strong>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-md-12 mt-3">
+                            <div class="alert alert-warning text-center">
+                                <i class="fas fa-exclamation-triangle"></i> شما هنوز مشاور خود را انتخاب نکرده‌اید!
+                                <a href="{% url 'accounts:profile' %}" class="alert-link">انتخاب مشاور</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                    
+                {% elif user.profile.role == 'consultant' %}
+                    <!-- ===== کارت‌های مشاور ===== -->
+                    <div class="col-md-12">
+                        <div class="card h-100 text-center">
+                            <div class="card-body">
+                                <i class="fas fa-users fa-3x text-info mb-3"></i>
+                                <h5 class="card-title">دانش‌آموزان من</h5>
+                                <p class="card-text text-muted">مشاهده‌ی لیست دانش‌آموزان و گزارش‌هایشان</p>
+                                <a href="{% url 'study_log:consultant_dashboard' %}" class="btn btn-info">
+                                    مشاهده دانش‌آموزان
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+        {% else %}
+            <!-- ===== کاربر لاگین نکرده ===== -->
+            <div class="row g-4 mt-3">
+                <div class="col-md-6">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
+                            <h5 class="card-title">ورود</h5>
+                            <p class="card-text text-muted">اگر قبلاً ثبت‌نام کردی، وارد شو</p>
+                            <a href="{% url 'accounts:login' %}" class="btn btn-primary">
+                                ورود
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-user-plus fa-3x text-success mb-3"></i>
+                            <h5 class="card-title">ثبت‌نام</h5>
+                            <p class="card-text text-muted">جدیدی؟ همین حالا ثبت‌نام کن</p>
+                            <a href="{% url 'accounts:register' %}" class="btn btn-success">
+                                ثبت‌نام
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ویژگی‌های سایت -->
+                <div class="col-md-12 mt-4">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="card h-100 text-center bg-light">
+                                <div class="card-body">
+                                    <i class="fas fa-clock fa-2x text-warning mb-2"></i>
+                                    <h6>ثبت زمان مطالعه</h6>
+                                    <small class="text-muted">ساعت شروع و پایان هر جلسه</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 text-center bg-light">
+                                <div class="card-body">
+                                    <i class="fas fa-chart-bar fa-2x text-info mb-2"></i>
+                                    <h6>پیگیری پیشرفت</h6>
+                                    <small class="text-muted">مشاهده‌ی آمار مطالعه</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 text-center bg-light">
+                                <div class="card-body">
+                                    <i class="fas fa-user-tie fa-2x text-primary mb-2"></i>
+                                    <h6>ارتباط با مشاور</h6>
+                                    <small class="text-muted">مشاوران از پیشرفت شما مطلع می‌شوند</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
