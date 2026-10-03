@@ -81,7 +81,7 @@ WSGI_APPLICATION = "Konkour_Studing_Record_APP.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # موتور MySQL
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': 'study_track_db',              # اسم دیتابیسی که ساختیم
         'USER': 'study_user',                  # کاربری که ساختیم
         'PASSWORD': 'ShMySQLSh',    # رمز کاربر
@@ -93,6 +93,17 @@ DATABASES = {
         },
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'konkour_db',              # دیتابیس جدید
+#         'USER': 'konkour_user',            # کاربر جدید
+#         'PASSWORD': '123456',              # رمز جدید
+#         'HOST': '127.0.0.1',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation
